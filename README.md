@@ -167,20 +167,20 @@ const tx = await paymentService.getTransaction(txId);
 npm run deploy:hedera
 ```
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 npm test
 ```
 
-## 📚 Recursos
+## Recursos
 
 - [EVVM Documentation](https://evvm.info)
 - [Hedera Documentation](https://docs.hedera.com)
 - [XMTP Documentation](https://docs.xmtp.org)
 - [libp2p Documentation](https://docs.libp2p.io)
 
-## 📝 Licencia
+##  Licencia
 
 MIT
 

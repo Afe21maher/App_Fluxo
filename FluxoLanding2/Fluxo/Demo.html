@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluxo</title>
+    <title>Demo Fluxo</title>
     <style>
         * {
             margin: 0;
@@ -833,26 +833,26 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navbar (igual que Landing) -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="#" class="logo-nav">
+            <a href="Landing.html" class="logo-nav">
                 <div class="logo-icon"><img src="imagenes/IconLogoRe.jpeg" alt="Logo"></div>
                 <span class="logo-text">Fluxo</span>
             </a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#caracteristicas">Características</a></li>
-                <li><a href="#como-funciona">Cómo Funciona</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-                <a href="#" class="nav-cta">Comienza Aquí</a>
+                <li><a href="Landing.html#inicio">Inicio</a></li>
+                <li><a href="Landing.html#caracteristicas">Características</a></li>
+                <li><a href="Landing.html#como-funciona">Cómo Funciona</a></li>
+                <li><a href="Landing.html#contacto">Contacto</a></li>
+                <a href="Landing.html" class="nav-cta">Comienza Aquí</a>
             </ul>
             <button class="menu-toggle" id="menuToggle">☰</button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="hero">
+    <!-- Hero Section adaptada para Demo -->
+    <section class="hero">
         <div class="bg-circle"><span class="bg-money">$</span></div>
         <div class="bg-circle"><span class="bg-money">$</span></div>
         <div class="bg-circle"><span class="bg-money">$</span></div>
@@ -860,245 +860,41 @@
 
         <div class="hero-content">
             <div class="hero-text">
-                <h1 class="hero-title">Realiza Pagos Sin Conexión a Internet</h1>
-                <p class="hero-subtitle">La solución más segura y confiable para procesar transacciones offline. Acepta pagos en cualquier lugar, sin importar la conectividad.</p>
-                
-                <div class="hero-features">
-                    <div class="feature-item">
-                        <div class="feature-icon">✓</div>
-                        <span>100% Seguro y Encriptado</span>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">✓</div>
-                        <span>Sin Necesidad de Internet</span>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">✓</div>
-                        <span>Sincronización Automática</span>
-                    </div>
-                </div>
-
-                <div class="hero-buttons">
-                    <a href="#" class="btn-primary">Comenzar</a>
-                    <button class="btn-secondary" onclick="alert('Demo en construcción')">Ver Demo</button>
-                </div>
+                <h1 class="hero-title">Demo de Fluxo</h1>
+                <p class="hero-subtitle">Aquí puedes ver cómo funciona Fluxo.</p>
+                <!-- Puedes agregar contenido de demo aquí -->
             </div>
-
             <div class="login-card">
                 <div class="login-header">
-                    <h2 class="login-title">Accede a tu Cuenta</h2>
-                    <p class="login-subtitle">Gestiona tus pagos desde cualquier lugar</p>
+                    <h2 class="login-title">Haz click para reproducir</h2>
+                    <p class="login-subtitle">Los limites estan en tu mente!</p>
                 </div>
-
-                <div class="tab-selector">
-                    <div class="tab-indicator" id="tabIndicator"></div>
-                    <button class="tab-button active" onclick="switchTab('login')">
-                        Iniciar Sesión
-                    </button>
-                    <button class="tab-button" onclick="switchTab('register')">
-                        Registrarse
-                    </button>
-                </div>
-
-                <div class="form-container">
-                    <!-- Login Form -->
-                    <div class="form-view active" id="loginForm">
-                        <form onsubmit="handleLogin(event)">
-                            <div class="input-group">
-                                <label class="input-label">Correo Electrónico</label>
-                                <div class="input-wrapper">
-                                    <input type="email" class="input-field" placeholder="tu@email.com" required>
-                                    <span class="input-icon">📧</span>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <label class="input-label">Contraseña</label>
-                                <div class="input-wrapper">
-                                    <input type="password" class="input-field" id="loginPassword" placeholder="••••••••" required>
-                                    <span class="input-icon">🔒</span>
-                                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button>
-                                </div>
-                            </div>
-
-                            <div class="form-options">
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox">
-                                    <span>Recordarme</span>
-                                </label>
-                                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
-                            </div>
-
-                            <button type="submit" class="submit-button">Iniciar Sesión</button>
-                        </form >
-
-                    <!-- Register Form -->
-                    <div class="form-view" id="registerForm">
-                        <form onsubmit="handleRegister(event)">
-                            <div class="input-group">
-                                <label class="input-label">Nombre Completo</label>
-                                <div class="input-wrapper">
-                                    <input type="text" class="input-field" placeholder="Juan Pérez" required>
-                                    <span class="input-icon">👤</span>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <label class="input-label">Correo Electrónico</label>
-                                <div class="input-wrapper">
-                                    <input type="email" class="input-field" placeholder="tu@email.com" required>
-                                    <span class="input-icon">📧</span>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <label class="input-label">Teléfono</label>
-                                <div class="input-wrapper">
-                                    <input type="tel" class="input-field" placeholder="+54 9 11 1234-5678" required>
-                                    <span class="input-icon">📱</span>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <label class="input-label">Contraseña</label>
-                                <div class="input-wrapper">
-                                    <input type="password" class="input-field" id="registerPassword" placeholder="••••••••" required>
-                                    <span class="input-icon">🔒</span>
-                                    <button type="button" class="password-toggle" onclick="togglePassword('registerPassword')">👁️</button>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="submit-button">Crear Cuenta</button>
-                        </form>
-
-                        <div class="login-footer">
-                            Al registrarte aceptas nuestros <a href="#">Términos</a> y <a href="#">Privacidad</a>
-                        </div>
-                    </div>
+                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.08);margin-bottom:1rem;">
+                    <iframe 
+                        src="https://www.youtube.com/embed/ysz5S6PUM-U"
+                        title="Demo Fluxo"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:20px;">
+                    </iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="caracteristicas" class="features-section">
-        <div class="container">
-            <h2 class="section-title">¿Por qué Fluxo?</h2>
-            <p class="section-subtitle">Funcionalidades diseñadas para tu negocio</p>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-card-icon">📶</div>
-                    <h3>100% Offline</h3>
-                    <p>Procesa pagos sin necesidad de conexión a internet. Ideal para zonas con poca disponibilidad de red o eventos masivos.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-card-icon">🔒</div>
-                    <h3>Seguridad y confianza</h3>
-                    <p>Todas las transacciones están encriptadas.</p>
-                </div> 
-                <div class="feature-card">
-                    <div class="feature-card-icon">⚡</div>
-                    <h3>Transacciones rápidas</h3>
-                    <p>Transacciones lanzadas por medio de dispositivos compatibles.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-card-icon">📊</div>
-                    <h3>Reportes en tiempo real</h3>
-                    <p>Accede a reportes y estadísticas al instante, sin importar dónde estés.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-card-icon">🤝</div>
-                    <h3>Soporte 24/7</h3>
-                    <p>Nuestro equipo está disponible para ayudarte en cualquier momento.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-card-icon">🌍</div>
-                    <h3>Multi-moneda y Multi-idioma</h3>
-                    <p>Acepta pagos en diferentes monedas e idiomas, adaptándonos a tus necesidades.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
+    <!-- Footer (igual que Landing) -->
     <footer>
         <div class="footer-content">
             <div class="footer-links">
-                <a href="#">Inicio</a>
-                <a href="#">Características</a>
-                <a href="#">Cómo Funciona</a>
-                <a href="#">Contacto</a>
+                <a href="Landing.html">Inicio</a>
+                <a href="Landing.html#caracteristicas">Características</a>
+                <a href="Landing.html#como-funciona">Cómo Funciona</a>
+                <a href="Landing.html#contacto">Contacto</a>
             </div>
-
             <p>&copy; 2023 Fluxo. Todos los derechos reservados.</p>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile menu toggle
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('active');
-        });
-
-        // Tab switcher
-        function switchTab(tab) {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabIndicator = document.getElementById('tabIndicator');
-            const forms = document.querySelectorAll('.form-view');
-
-            tabButtons.forEach(button => {
-                button.classList.remove('active');
-            });
-
-            if (tab === 'register') {
-                tabIndicator.classList.add('register');
-            } else {
-                tabIndicator.classList.remove('register');
-            }
-
-            setTimeout(() => {
-                forms.forEach(form => {
-                    form.classList.remove('active');
-                });
-                document.getElementById(tab + 'Form').classList.add('active');
-            }, 150);
-
-            document.querySelector(`.tab-button[onclick="switchTab('${tab}')"]`).classList.add('active');
-        }
-
-        // Password toggle
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
-        }
-
-        // Handle login form submission
-        function handleLogin(event) {
-            event.preventDefault();
-            // Aquí iría la lógica para manejar el inicio de sesión
-            alert('Iniciar sesión con: ' + new FormData(event.target).get('email'));
-        }
-
-        // Handle register form submission
-        function handleRegister(event) {
-            event.preventDefault();
-            // Aquí iría la lógica para manejar el registro
-            alert('Registrar con: ' + new FormData(event.target).get('email'));
-        }
-    </script>
+    <!-- Scripts iguales que Landing si necesitas funcionalidad -->
 </body>
 </html>
