@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header/Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .logo-icon img {
+            width: 56px;
+            height: 70px;
+            border-radius: 5px;
+            object-fit: contain;
+            background: white;
+        }
+
+        .logo-text {
+            font-size: 1.7rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b35;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* Background Circles */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 8s ease-in-out infinite;
+            overflow: hidden; /* Opcional, para que el signo no se salga */
+        }
+
+        .bg-circle .bg-money {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.25);
+            text-shadow: 0 2px 20px rgba(255, 107, 53, 0.15);
+            pointer-events: none;
+            user-select: none;
+            font-family: inherit;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -150px;
+            animation-delay: 0s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 2s;
+        }
+
+        .bg-circle:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 30%;
+            right: 10%;
+            animation-delay: 4s;
+        }
+
+        .bg-circle:nth-child(4) {
+            width: 250px;
+            height: 250px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-text {
+            color: white;
+            animation: fadeInLeft 1s ease;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .hero-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #ff6b35;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #ff6b35;
+            transform: translateY(-3px);
+        }
+
+        /* Login Card in Hero */
+        .login-card {
+            background: white;
+            border-radius: 30px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInRight 1s ease;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Tab Selector */
+        .tab-selector {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 0.4rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tab-button.active {
+            color: white;
+        }
+
+        .tab-indicator {
+            position: absolute;
+            top: 0.4rem;
+            left: 0.4rem;
+            width: calc(50% - 0.4rem);
+            height: calc(100% - 0.8rem);
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border-radius: 12px;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .tab-indicator.register {
+            transform: translateX(calc(100% + 0.4rem));
+        }
+
+        /* Form Styles */
+        .form-container {
+            position: relative;
+            min-height: 400px;
+        }
+
+        .form-view {
+            display: none;
+            animation: fadeInSlide 0.4s ease;
+        }
+
+        .form-view.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e5e5e5;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: #fafafa;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #ff6b35;
+            background: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-field:focus ~ .input-icon {
+            color: #ff6b35;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #ff6b35;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #ff6b35;
+        }
+
+        .forgot-link {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-link:hover {
+            color: #f7931e;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-button:hover::before {
+            left: 100%;
+        }
+
+        .submit-button:active {
+            transform: scale(0.98);
+        }
+
+        .biometric-section {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .biometric-text {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 1rem;
+        }
+
+        .biometric-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f5f5f5, #e5e5e5);
+            border: 3px solid #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .biometric-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .login-footer a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 5rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ff6b35;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% { 
+                transform: translateY(-30px) rotate(5deg);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-text {
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .login-card {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 2rem;
+                gap: 1.5rem;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .login-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .features-section {
+                padding: 3rem 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 1rem;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3rem;
+            }
+
+            .logo-text {
+                font-size: 1.3rem;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .login-card {
+                padding: 1.5rem;
+                border-radius: 20px;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo-nav">
+                <div class="logo-icon"><img src="imagenes/IconLogoRe.jpeg" alt="Logo"></div>
+                <span class="logo-text">Fluxo</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#caracteristicas">Características</a></li>
+                <li><a href="#como-funciona">Cómo Funciona</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <a href="#" class="nav-cta">Comienza Aquí</a>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="bg-circle"><span class="bg-money">$</span></div>
+        <div class="bg-circle"><span class="bg-money">$</span></div>
+        <div class="bg-circle"><span class="bg-money">$</span></div>
+        <div class="bg-circle"><span class="bg-money">$</span></div>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Realiza Pagos Sin Conexión a Internet</h1>
+                <p class="hero-subtitle">La solución más segura y confiable para procesar transacciones offline. Acepta pagos en cualquier lugar, sin importar la conectividad.</p>
+                
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <span>100% Seguro y Encriptado</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <span>Sin Necesidad de Internet</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <span>Sincronización Automática</span>
+                    </div>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#" class="btn-primary">Comenzar</a>
+                    <button class="btn-secondary" onclick="alert('Demo en construcción')">Ver Demo</button>
+                </div>
+            </div>
+
+            <div class="login-card">
+                <div class="login-header">
+                    <h2 class="login-title">Accede a tu Cuenta</h2>
+                    <p class="login-subtitle">Gestiona tus pagos desde cualquier lugar</p>
+                </div>
+
+                <div class="tab-selector">
+                    <div class="tab-indicator" id="tabIndicator"></div>
+                    <button class="tab-button active" onclick="switchTab('login')">
+                        Iniciar Sesión
+                    </button>
+                    <button class="tab-button" onclick="switchTab('register')">
+                        Registrarse
+                    </button>
+                </div>
+
+                <div class="form-container">
+                    <!-- Login Form -->
+                    <div class="form-view active" id="loginForm">
+                        <form onsubmit="handleLogin(event)">
+                            <div class="input-group">
+                                <label class="input-label">Correo Electrónico</label>
+                                <div class="input-wrapper">
+                                    <input type="email" class="input-field" placeholder="tu@email.com" required>
+                                    <span class="input-icon">📧</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label">Contraseña</label>
+                                <div class="input-wrapper">
+                                    <input type="password" class="input-field" id="loginPassword" placeholder="••••••••" required>
+                                    <span class="input-icon">🔒</span>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button>
+                                </div>
+                            </div>
+
+                            <div class="form-options">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox">
+                                    <span>Recordarme</span>
+                                </label>
+                                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                            </div>
+
+                            <button type="submit" class="submit-button">Iniciar Sesión</button>
+                        </form >
+
+                    <!-- Register Form -->
+                    <div class="form-view" id="registerForm">
+                        <form onsubmit="handleRegister(event)">
+                            <div class="input-group">
+                                <label class="input-label">Nombre Completo</label>
+                                <div class="input-wrapper">
+                                    <input type="text" class="input-field" placeholder="Juan Pérez" required>
+                                    <span class="input-icon">👤</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label">Correo Electrónico</label>
+                                <div class="input-wrapper">
+                                    <input type="email" class="input-field" placeholder="tu@email.com" required>
+                                    <span class="input-icon">📧</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label">Teléfono</label>
+                                <div class="input-wrapper">
+                                    <input type="tel" class="input-field" placeholder="+54 9 11 1234-5678" required>
+                                    <span class="input-icon">📱</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label">Contraseña</label>
+                                <div class="input-wrapper">
+                                    <input type="password" class="input-field" id="registerPassword" placeholder="••••••••" required>
+                                    <span class="input-icon">🔒</span>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('registerPassword')">👁️</button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-button">Crear Cuenta</button>
+                        </form>
+
+                        <div class="login-footer">
+                            Al registrarte aceptas nuestros <a href="#">Términos</a> y <a href="#">Privacidad</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="caracteristicas" class="features-section">
+        <div class="container">
+            <h2 class="section-title">¿Por qué Fluxo?</h2>
+            <p class="section-subtitle">Funcionalidades diseñadas para tu negocio</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-card-icon">📶</div>
+                    <h3>100% Offline</h3>
+                    <p>Procesa pagos sin necesidad de conexión a internet. Ideal para zonas con poca disponibilidad de red o eventos masivos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">🔒</div>
+                    <h3>Seguridad y confianza</h3>
+                    <p>Todas las transacciones están encriptadas.</p>
+                </div> 
+                <div class="feature-card">
+                    <div class="feature-card-icon">⚡</div>
+                    <h3>Transacciones rápidas</h3>
+                    <p>Transacciones lanzadas por medio de dispositivos compatibles.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">📊</div>
+                    <h3>Reportes en tiempo real</h3>
+                    <p>Accede a reportes y estadísticas al instante, sin importar dónde estés.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">🤝</div>
+                    <h3>Soporte 24/7</h3>
+                    <p>Nuestro equipo está disponible para ayudarte en cualquier momento.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">🌍</div>
+                    <h3>Multi-moneda y Multi-idioma</h3>
+                    <p>Acepta pagos en diferentes monedas e idiomas, adaptándonos a tus necesidades.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Inicio</a>
+                <a href="#">Características</a>
+                <a href="#">Cómo Funciona</a>
+                <a href="#">Contacto</a>
+            </div>
+
+            <p>&copy; 2023 Fluxo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        });
+
+        // Tab switcher
+        function switchTab(tab) {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabIndicator = document.getElementById('tabIndicator');
+            const forms = document.querySelectorAll('.form-view');
+
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            if (tab === 'register') {
+                tabIndicator.classList.add('register');
+            } else {
+                tabIndicator.classList.remove('register');
+            }
+
+            setTimeout(() => {
+                forms.forEach(form => {
+                    form.classList.remove('active');
+                });
+                document.getElementById(tab + 'Form').classList.add('active');
+            }, 150);
+
+            document.querySelector(`.tab-button[onclick="switchTab('${tab}')"]`).classList.add('active');
+        }
+
+        // Password toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+        }
+
+        // Handle login form submission
+        function handleLogin(event) {
+            event.preventDefault();
+            // Aquí iría la lógica para manejar el inicio de sesión
+            alert('Iniciar sesión con: ' + new FormData(event.target).get('email'));
+        }
+
+        // Handle register form submission
+        function handleRegister(event) {
+            event.preventDefault();
+            // Aquí iría la lógica para manejar el registro
+            alert('Registrar con: ' + new FormData(event.target).get('email'));
+        }
+    </script>
+</body>
+</html>
