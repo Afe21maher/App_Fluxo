@@ -31,7 +31,19 @@ export class PaymentService {
     this.syncManager = syncManager;
 
     if (privateKey) {
-      this.wallet = new ethers.Wallet(privateKey);
+      // Clean up private key: remove any whitespace and fix common errors
+      let cleanedKey = privateKey.trim();
+      
+      // Fix common error: 0xOx -> 0x (O instead of 0)
+      cleanedKey = cleanedKey.replace(/^0xOx/i, "0x");
+      cleanedKey = cleanedKey.replace(/^Ox/i, "0x");
+      
+      // Ensure it starts with 0x
+      if (!cleanedKey.startsWith("0x")) {
+        cleanedKey = "0x" + cleanedKey;
+      }
+      
+      this.wallet = new ethers.Wallet(cleanedKey);
     }
 
     this.setupHandlers();
@@ -66,10 +78,12 @@ export class PaymentService {
     logger.info(`Payment request created: ${request.id} to ${to}`);
 
     // Send via XMTP if available
-    try {
-      await this.xmtpMessaging.sendPaymentRequest(to, request);
-    } catch (error) {
-      logger.warn("Could not send payment request via XMTP:", error);
+    if (this.xmtpMessaging) {
+      try {
+        await this.xmtpMessaging.sendPaymentRequest(to, request);
+      } catch (error) {
+        logger.warn("Could not send payment request via XMTP:", error);
+      }
     }
 
     return request;
@@ -81,7 +95,8 @@ export class PaymentService {
   async createOfflinePayment(
     to: string,
     amount: string,
-    tokenAddress?: string
+    tokenAddress?: string,
+    message?: string
   ): Promise<OfflineTransaction> {
     if (!this.wallet) {
       throw new Error("Wallet not initialized");
@@ -97,43 +112,53 @@ export class PaymentService {
       signature: "",
       status: "pending",
       meshNodes: [],
+      message,
     };
 
     // Sign the transaction
-    const message = `${tx.from}${tx.to}${tx.amount}${tx.timestamp}`;
-    tx.signature = await this.wallet.signMessage(message);
+    const signMessage = `${tx.from}${tx.to}${tx.amount}${tx.timestamp}`;
+    tx.signature = await this.wallet.signMessage(signMessage);
 
     logger.info(`Offline payment created: ${tx.id} from ${tx.from} to ${to}`);
 
-    // Validate transaction
-    const isValid = await this.evvmFisher.validateTransaction(tx);
-    if (!isValid) {
-      throw new Error("Transaction signature validation failed");
+    // Validate transaction (if EVVM is available)
+    if (this.evvmFisher) {
+      const isValid = await this.evvmFisher.validateTransaction(tx);
+      if (!isValid) {
+        throw new Error("Transaction signature validation failed");
+      }
     }
 
     // Save to offline storage
     await this.storage.saveTransaction(tx);
 
-    // Capture in EVVM Fisher
-    await this.evvmFisher.captureTransaction(tx);
-
-    // Execute in EVVM (virtual blockchain)
-    await this.evvmFisher.executeTransaction(tx.id);
+    // Capture in EVVM Fisher (if available)
+    if (this.evvmFisher) {
+      await this.evvmFisher.captureTransaction(tx);
+      // Execute in EVVM (virtual blockchain)
+      await this.evvmFisher.executeTransaction(tx.id);
+    } else {
+      logger.warn("EVVM not available, transaction saved but not processed in EVVM");
+    }
 
     // Broadcast to mesh network
     await this.meshNetwork.broadcastTransaction(tx);
 
     // Send notification via XMTP
-    try {
-      await this.xmtpMessaging.sendTransactionNotification(to, tx);
-    } catch (error) {
-      logger.warn("Could not send transaction notification via XMTP:", error);
+    if (this.xmtpMessaging) {
+      try {
+        await this.xmtpMessaging.sendTransactionNotification(to, tx);
+      } catch (error) {
+        logger.warn("Could not send transaction notification via XMTP:", error);
+      }
     }
 
-    // Try to sync immediately if online
-    this.syncManager.syncTransaction(tx.id).catch((error) => {
-      logger.debug(`Could not sync transaction ${tx.id} immediately:`, error);
-    });
+    // Try to sync immediately if online (only if sync manager is available)
+    if (this.syncManager) {
+      this.syncManager.syncTransaction(tx.id).catch((error) => {
+        logger.debug(`Could not sync transaction ${tx.id} immediately:`, error);
+      });
+    }
 
     return tx;
   }
@@ -145,11 +170,13 @@ export class PaymentService {
     try {
       logger.info(`Handling incoming transaction ${tx.id}`);
 
-      // Validate transaction
-      const isValid = await this.evvmFisher.validateTransaction(tx);
-      if (!isValid) {
-        logger.warn(`Invalid transaction ${tx.id}, ignoring`);
-        return;
+      // Validate transaction (if EVVM is available)
+      if (this.evvmFisher) {
+        const isValid = await this.evvmFisher.validateTransaction(tx);
+        if (!isValid) {
+          logger.warn(`Invalid transaction ${tx.id}, ignoring`);
+          return;
+        }
       }
 
       // Check if we've already seen this transaction
@@ -162,11 +189,12 @@ export class PaymentService {
       // Save to storage
       await this.storage.saveTransaction(tx);
 
-      // Capture in EVVM Fisher
-      await this.evvmFisher.captureTransaction(tx);
-
-      // Execute in EVVM
-      await this.evvmFisher.executeTransaction(tx.id);
+      // Capture in EVVM Fisher (if available)
+      if (this.evvmFisher) {
+        await this.evvmFisher.captureTransaction(tx);
+        // Execute in EVVM
+        await this.evvmFisher.executeTransaction(tx.id);
+      }
 
       // If this transaction is for us, update status
       if (tx.to.toLowerCase() === this.getAddress().toLowerCase()) {
@@ -201,8 +229,12 @@ export class PaymentService {
     if (this.wallet) {
       return this.wallet.address;
     }
-    if (this.xmtpMessaging) {
-      return this.xmtpMessaging.getAddress();
+    if (this.xmtpMessaging && typeof this.xmtpMessaging.getAddress === 'function') {
+      try {
+        return this.xmtpMessaging.getAddress();
+      } catch {
+        // Fall through
+      }
     }
     return this.meshNetwork.getPeerId();
   }

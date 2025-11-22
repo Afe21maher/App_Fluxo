@@ -5,10 +5,13 @@ import { noise } from "@chainsafe/libp2p-noise";
 import { bootstrap } from "@libp2p/bootstrap";
 import { kadDHT } from "@libp2p/kad-dht";
 import { gossipsub } from "@chainsafe/libp2p-gossipsub";
+import { identify } from "@libp2p/identify";
+import { ping } from "@libp2p/ping";
 import { MemoryDatastore } from "datastore-core";
 import { logger } from "../utils/logger";
 import { config } from "../config";
 import { OfflineTransaction, MeshNode } from "../types";
+import { showMeshBanner } from "../utils/banners";
 
 export class MeshNetwork {
   private node: Libp2p | null = null;
@@ -21,10 +24,11 @@ export class MeshNetwork {
   async start(): Promise<void> {
     try {
       const datastore = new MemoryDatastore();
+      const port = config.mesh.port;
 
       this.node = await createLibp2p({
         addresses: {
-          listen: [`/ip4/0.0.0.0/tcp/${config.mesh.port}`],
+          listen: [`/ip4/0.0.0.0/tcp/${port}/ws`],
         },
         transports: [webSockets()],
         streamMuxers: [mplex()],
@@ -35,6 +39,8 @@ export class MeshNetwork {
           }),
         ] : [],
         services: {
+          identify: identify(),
+          ping: ping(),
           dht: kadDHT({
             clientMode: false,
           }),
@@ -48,6 +54,7 @@ export class MeshNetwork {
       this.setupEventHandlers();
       await this.node.start();
 
+      showMeshBanner();
       logger.info(
         `Mesh network started on port ${config.mesh.port}, PeerID: ${this.node.peerId.toString()}`
       );

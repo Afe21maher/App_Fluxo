@@ -8,6 +8,7 @@ export interface OfflineTransaction {
   signature: string;
   status: "pending" | "confirmed" | "synced" | "failed";
   meshNodes: string[]; // Nodos que han visto esta transacción
+  message?: string; // Mensaje opcional
 }
 
 export interface MeshNode {

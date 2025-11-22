@@ -83,7 +83,7 @@ async function exampleUsage() {
 }
 
 // Run the example
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('usage.js')) {
   exampleUsage().catch((error) => {
     console.error("Fatal error:", error);
     process.exit(1);

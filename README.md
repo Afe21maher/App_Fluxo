@@ -1,14 +1,8 @@
 # Offline Mesh Payments
 
-Sistema de pagos blockchain offline utilizando redes mesh, implementado con EVVM, Hedera y XMTP.
+Sistema de pagos blockchain offline utilizando redes mesh, implementado con EVVM, Hedera y Privy.
 
-## 🎯 Tracks ETHGlobal Buenos Aires
-
-- **EVVM**: Novel EVVM Fisher/Relayer ($5,000)
-- **Hedera**: EVM Innovator Track ($4,000)
-- **XMTP**: Best Miniapp in a Group Chat ($2,500)
-
-## 🏗️ Arquitectura
+## Arquitectura
 
 ```
 Red Mesh (libp2p + XMTP) → EVVM Fisher/Relayer → Sincronización (Hedera)
@@ -23,7 +17,7 @@ Red Mesh (libp2p + XMTP) → EVVM Fisher/Relayer → Sincronización (Hedera)
 5. **Se transmite por mesh** → Otros nodos cercanos la reciben
 6. **Cuando hay internet** → Se sincroniza con Hedera (rápido y barato)
 
-## 🚀 Instalación
+## Instalación
 
 ```bash
 # Instalar dependencias
@@ -33,7 +27,7 @@ npm install
 npm run compile:contracts
 ```
 
-## ⚙️ Configuración
+## Configuración
 
 1. Copia `.env.example` a `.env`
 2. Configura las variables de entorno:
@@ -57,7 +51,7 @@ MESH_PORT=9000
 MESH_BOOTSTRAP_NODES=/ip4/127.0.0.1/tcp/9000/p2p/...
 ```
 
-## 🏃 Ejecución
+## Ejecución
 
 ### Desarrollo
 ```bash
@@ -76,7 +70,7 @@ npm start
 ts-node src/examples/usage.ts
 ```
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 src/
@@ -110,7 +104,7 @@ scripts/
 └── deploy-hedera.ts        # Script de deployment
 ```
 
-## 🔧 Funcionalidades Principales
+## Funcionalidades Principales
 
 ### 1. Red Mesh (libp2p)
 - Comunicación P2P entre dispositivos cercanos
@@ -139,7 +133,7 @@ scripts/
 - Persistencia de transacciones
 - Índices para búsqueda rápida
 
-## 📝 API Principal
+## API Principal
 
 ```typescript
 // Crear pago offline
@@ -164,7 +158,7 @@ const txs = await paymentService.getTransactions();
 const tx = await paymentService.getTransaction(txId);
 ```
 
-## 🚢 Deployment
+## Deployment
 
 ### Deployar Contrato en Hedera
 
