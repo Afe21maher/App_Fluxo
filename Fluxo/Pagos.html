@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos - Fluxo</title>
+    <style>
+        /* --- Estilos globales y navbar igual que Landing/Demo --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #222;
+        }
+        .navbar {
+            width: 100%;
+            background: #fff;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+        .logo-icon img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+        .logo-text {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: #ff6b35;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #222;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #ff6b35;
+        }
+        .nav-cta {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.15);
+            margin-left: 1rem;
+        }
+        .menu-toggle {
+            display: none;
+        }
+
+        /* --- Pagos Section Mejorada --- */
+        .pagos-main {
+            display: flex;
+            max-width: 1100px;
+            margin: 120px auto 0 auto;
+            gap: 2rem;
+        }
+        .pagos-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+        .pagos-btn {
+            width: 56px;
+            height: 56px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ff6b35 60%, #f7931e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.12);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .pagos-btn:last-child {
+            margin-bottom: 0;
+        }
+        .pagos-btn:hover {
+            background: linear-gradient(135deg, #f7931e 60%, #ff6b35 100%);
+            transform: scale(1.07);
+        }
+        .pagos-btn img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+        .pagos-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .pagos-row {
+            display: flex;
+            gap: 24px;
+        }
+        .wallets-box, .saldo-box, .network-box, .historial-box {
+            background: #fff;
+            border-radius: 18px;
+            padding: 1.5rem 2rem;
+            font-size: 1.15rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: none;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .wallets-box {
+            max-width: 320px;
+            min-width: 220px;
+        }
+        .wallets-title {
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 8px;
+        }
+        .wallet-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .wallet-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f3f3;
+        }
+        .wallet-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: #ffe2d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+        .wallet-name {
+            font-weight: 500;
+        }
+        .saldo-box {
+            flex: 2;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .saldo-title {
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 8px;
+        }
+        .saldo-amount {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #222;
+            margin-bottom: 6px;
+        }
+        .saldo-currency {
+            font-size: 1rem;
+            color: #888;
+        }
+        .saldo-actions {
+            margin-top: 18px;
+            display: flex;
+            gap: 16px;
+        }
+        .saldo-action-btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.7rem 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.10);
+        }
+        .saldo-action-btn:hover {
+            background: linear-gradient(45deg, #f7931e, #ff6b35);
+            transform: scale(1.05);
+        }
+        .network-box {
+            max-width: 350px;
+            margin-bottom: 16px;
+        }
+        .network-title {
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 8px;
+        }
+        .network-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .network-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4caf50;
+            display: inline-block;
+        }
+        .historial-box {
+            margin-top: 0;
+        }
+        .historial-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ff6b35;
+        }
+        .historial-list {
+            font-size: 1rem;
+            color: #444;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .historial-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f3f3;
+        }
+        .historial-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: #ffe2d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        .historial-details {
+            flex: 1;
+        }
+        .historial-amount {
+            font-weight: 700;
+            color: #ff6b35;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .pagos-main {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .pagos-sidebar {
+                flex-direction: row;
+                gap: 16px;
+                margin-bottom: 1.5rem;
+            }
+            .pagos-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+        @media (max-width: 600px) {
+            .pagos-main {
+                max-width: 98vw;
+                margin: 100px auto 0 auto;
+            }
+            .wallets-box, .saldo-box, .network-box, .historial-box {
+                width: 100%;
+                padding: 1rem;
+            }
+            .saldo-amount {
+                font-size: 1.5rem;
+            }
+        }
+        .floating-action {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .fab-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35 60%, #f7931e 100%);
+            box-shadow: 0 6px 24px rgba(255,107,53,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 2.2rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            position: relative;
+        }
+
+        .fab-btn:hover {
+            background: linear-gradient(135deg, #f7931e 60%, #ff6b35 100%);
+            transform: scale(1.08);
+        }
+
+        .fab-btn img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .fab-label {
+            position: absolute;
+            right: 80px;
+            background: #fff;
+            color: #ff6b35;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.10);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        .fab-btn:hover .fab-label {
+            opacity: 1;
+        }
+
+        .floating-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+            padding: 2rem 2.5rem;
+            min-width: 320px;
+            max-width: 90vw;
+            z-index: 2100;
+            display: none;
+            flex-direction: column;
+            gap: 1.2rem;
+            animation: fadeInSlide 0.3s;
+        }
+
+        .floating-modal.active {
+            display: flex;
+        }
+
+        .floating-modal h3 {
+            color: #ff6b35;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .floating-modal label {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: #333;
+        }
+
+        .floating-modal input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .floating-modal .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .floating-modal .modal-btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.7rem 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .floating-modal .modal-btn:hover {
+            background: linear-gradient(45deg, #f7931e, #ff6b35);
+            transform: scale(1.05);
+        }
+
+        .network-select-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .network-select {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            font-size: 1.08rem;
+            background: #f9f9f9;
+            color: #222;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            outline: none;
+            transition: border 0.2s;
+        }
+        .network-select:focus {
+            border: 1.5px solid #ff6b35;
+        }
+
+        @media (max-width: 600px) {
+            .floating-modal {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 1.2rem 1rem;
+                min-width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navbar igual que Landing -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="Landing.html" class="logo-nav">
+                <div class="logo-icon"><img src="imagenes/IconLogoRe.jpeg" alt="Logo"></div>
+                <span class="logo-text">Fluxo</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="Landing.html#inicio">Inicio</a></li>
+                <li><a href="Pagos.html">Pagos</a></li>
+                <li><a href="#">Perfil</a></li>
+                <li><a href="#">Salir</a></li>
+                <a href="Landing.html" class="nav-cta">Comienza Aquí</a>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Sección de Pagos Mejorada -->
+    <main>
+        <div class="pagos-main">
+            <div class="pagos-sidebar">
+                <button class="pagos-btn" title="Comprar"><img src="imagenes/cart.png" alt="Comprar"></button>
+                <button class="pagos-btn" title="Enviar"><img src="imagenes/direct.png" alt="Enviar"></button>
+                <button class="pagos-btn" title="Recibir"><img src="imagenes/received.png" alt="Recibir"></button>
+                <button class="pagos-btn" title="Más opciones">⋯</button>
+            </div>
+            <div class="pagos-content">
+                <div class="pagos-row">
+                    <div class="wallets-box">
+                        <div class="wallets-title">Wallets</div>
+                        <div class="wallet-list">
+                            <div class="wallet-item">
+                                <div class="wallet-icon">🦊</div>
+                                <div class="wallet-name">MetaMask</div>
+                                <div class="wallet-address" style="font-size:0.9rem;color:#888;">0xA1...B2C3</div>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="saldo-box">
+                        <div class="saldo-title">Saldo de la cuenta</div>
+                        <div class="saldo-amount">$1,250.00</div>
+                        <div class="saldo-currency">MXN</div>
+                        <div class="saldo-actions">
+                        </div>
+                    </div>
+                </div>
+                <div class="network-box">
+                    <div class="network-title">Red utilizada</div>
+                    <div class="network-status">
+                        <span class="network-dot"></span>
+                        <span id="networkLabel">Ethereum Mainnet</span>
+                    </div>
+                </div>
+                <div class="historial-box">
+                    <div class="historial-title">Historial de transacciones</div>
+                    <div class="historial-list">
+                        <div class="historial-item">
+                            <div class="historial-icon">📤</div>
+                            <div class="historial-details">
+                                Envío a 0xB4...D5E6
+                                <div style="font-size:0.85rem;color:#888;">Hace 2 horas</div>
+                            </div>
+                            <div class="historial-amount">-$250.00</div>
+                        </div>
+                        <div class="historial-item">
+                            <div class="historial-icon">📥</div>
+                            <div class="historial-details">
+                                Depósito de 0xC7...F8G9
+                                <div style="font-size:0.85rem;color:#888;">Ayer</div>
+                            </div>
+                            <div class="historial-amount">+$500.00</div>
+                        </div>
+                        <div class="historial-item">
+                            <div class="historial-icon">🛒</div>
+                            <div class="historial-details">
+                                Compra en Amazon
+                                <div style="font-size:0.85rem;color:#888;">Hace 3 días</div>
+                            </div>
+                            <div class="historial-amount">-$120.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Pago -->
+    <div class="floating-modal" id="modalPay">
+        <h3>Realizar pago</h3>
+        <label for="payTo">Enviar a (Wallet o usuario):</label>
+        <input type="text" id="payTo" placeholder="Ej: 0xA1...B2C3">
+        <label for="payAmount">Monto:</label>
+        <input type="number" id="payAmount" placeholder="$0.00">
+        <label for="payNetwork">Red:</label>
+        <select id="payNetwork" class="network-select" style="margin-bottom:0.8rem;">
+            <option value="ethereum">Ethereum Mainnet</option>
+            <option value="polygon">Polygon</option>
+            <option value="binance">Binance Smart Chain</option>
+            <option value="optimism">Optimism</option>
+            <option value="arbitrum">Arbitrum</option>
+        </select>
+        <div class="modal-actions">
+            <button class="modal-btn" onclick="closeModal('modalPay')">Cancelar</button>
+            <button class="modal-btn" onclick="sendPayment()">Enviar</button>
+        </div>
+    </div>
+
+    <!-- Modal para Recibir -->
+    <div class="floating-modal" id="modalReceive">
+        <h3>Recibir dinero</h3>
+        <label for="receiveFrom">De (Wallet o usuario):</label>
+        <input type="text" id="receiveFrom" placeholder="Ej: 0xB4...D5E6">
+        <label for="receiveAmount">Monto:</label>
+        <input type="number" id="receiveAmount" placeholder="$0.00">
+        <label for="receiveNetwork">Red:</label>
+        <select id="receiveNetwork" class="network-select" style="margin-bottom:0.8rem;">
+            <option value="ethereum">Ethereum Mainnet</option>
+            <option value="polygon">Polygon</option>
+            <option value="binance">Binance Smart Chain</option>
+            <option value="optimism">Optimism</option>
+            <option value="arbitrum">Arbitrum</option>
+        </select>
+        <div class="modal-actions">
+            <button class="modal-btn" onclick="closeModal('modalReceive')">Cancelar</button>
+            <button class="modal-btn" onclick="receivePayment()">Recibir</button>
+        </div>
+    </div>
+
+    <!-- Modal para Comprar -->
+    <div class="floating-modal" id="modalBuy">
+        <h3>Comprar</h3>
+        <div style="text-align:center; padding:2rem 0;">
+            <img src="imagenes/cart.png" alt="Comprar" style="width:64px; height:64px; margin-bottom:1rem;">
+            <p style="font-size:1.2rem; color:#888;">Coming soon...</p>
+        </div>
+        <div class="modal-actions">
+            <button class="modal-btn" onclick="closeModal('modalBuy')">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Footer igual que Landing -->
+    <footer>
+        <div class="footer-content" style="max-width:1200px;margin:0 auto;padding:2rem 1rem 1rem 1rem;">
+            <div class="footer-links" style="margin-bottom:1rem;">
+                <a href="Landing.html">Inicio</a> |
+                <a href="Landing.html#caracteristicas">Características</a> |
+                <a href="Landing.html#como-funciona">Cómo Funciona</a> |
+                <a href="Landing.html#contacto">Contacto</a>
+            </div>
+            <p>&copy; 2023 Fluxo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+    // Floating modal logic para los botones existentes
+    const btnEnviar = document.querySelector('.pagos-btn[title="Enviar"]');
+    const btnRecibir = document.querySelector('.pagos-btn[title="Recibir"]');
+    const modalPay = document.getElementById('modalPay');
+    const modalReceive = document.getElementById('modalReceive');
+    const btnComprar = document.querySelector('.pagos-btn[title="Comprar"]');
+    const modalBuy = document.getElementById('modalBuy');
+
+    btnEnviar.addEventListener('click', () => {
+        modalPay.classList.add('active');
+        modalReceive.classList.remove('active');
+    });
+
+    btnRecibir.addEventListener('click', () => {
+        modalReceive.classList.add('active');
+        modalPay.classList.remove('active');
+    });
+
+    btnComprar.addEventListener('click', () => {
+        modalBuy.classList.add('active');
+    });
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+
+    function sendPayment() {
+        // Aquí va la lógica para enviar el pago
+        closeModal('modalPay');
+        alert('Pago enviado');
+    }
+
+    function receivePayment() {
+        // Aquí va la lógica para recibir el pago
+        closeModal('modalReceive');
+        alert('Dinero recibido');
+    }
+
+    // Actualiza el nombre de la red al seleccionar
+    // (Solo para mostrar la red seleccionada en el cuadro principal, si lo deseas)
+    // Puedes eliminar este script si ya no lo necesitas.
+    const networkSelect = document.getElementById('networkSelect');
+    const networkLabel = document.getElementById('networkLabel');
+
+    networkSelect.addEventListener('change', function() {
+        networkLabel.textContent = networkSelect.options[networkSelect.selectedIndex].text;
+    });
+    </script>
+</body>
+</html>

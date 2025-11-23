@@ -1,0 +1,520 @@
+.container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: #f5f7fa;
+  min-height: 100vh;
+  color: #222;
+}
+
+.navbar {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.07);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.navContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoNav {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
+}
+
+.logoIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.logoIcon img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.logoText {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #ff6b35;
+}
+
+.navLinks {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  align-items: center;
+}
+
+.navLinks a {
+  color: #222;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.navLinks a:hover {
+  color: #ff6b35;
+}
+
+.logoutBtn {
+  background: none;
+  border: none;
+  color: #222;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.logoutBtn:hover {
+  color: #ff6b35;
+}
+
+.navCta {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.15);
+  margin-left: 1rem;
+}
+
+.pagosMain {
+  display: flex;
+  max-width: 1100px;
+  margin: 120px auto 0 auto;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.pagosSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+.pagosBtn {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ff6b35 60%, #f7931e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.12);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.pagosBtn:last-child {
+  margin-bottom: 0;
+}
+
+.pagosBtn:hover {
+  background: linear-gradient(135deg, #f7931e 60%, #ff6b35 100%);
+  transform: scale(1.07);
+}
+
+.pagosBtn img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.pagosContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pagosRow {
+  display: flex;
+  gap: 24px;
+}
+
+.walletsBox,
+.saldoBox,
+.networkBox,
+.historialBox {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.5rem 2rem;
+  font-size: 1.15rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.walletsBox {
+  max-width: 320px;
+  min-width: 220px;
+}
+
+.walletsTitle {
+  font-weight: 700;
+  color: #ff6b35;
+  margin-bottom: 8px;
+}
+
+.walletList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.walletItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.walletIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ffe2d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.walletName {
+  font-weight: 500;
+}
+
+.walletAddress {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.saldoBox {
+  flex: 2;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.saldoTitle {
+  font-weight: 700;
+  color: #ff6b35;
+  margin-bottom: 8px;
+}
+
+.saldoAmount {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.saldoCurrency {
+  font-size: 1rem;
+  color: #888;
+}
+
+.saldoActions {
+  margin-top: 18px;
+  display: flex;
+  gap: 16px;
+}
+
+.saldoActionBtn {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.7rem 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+}
+
+.saldoActionBtn:hover {
+  background: linear-gradient(45deg, #f7931e, #ff6b35);
+  transform: scale(1.05);
+}
+
+.networkBox {
+  max-width: 350px;
+  margin-bottom: 16px;
+}
+
+.networkTitle {
+  font-weight: 700;
+  color: #ff6b35;
+  margin-bottom: 8px;
+}
+
+.networkStatus {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.networkDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4caf50;
+  display: inline-block;
+}
+
+.historialBox {
+  margin-top: 0;
+}
+
+.historialTitle {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #ff6b35;
+}
+
+.historialList {
+  font-size: 1rem;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer {
+  background: #222;
+  color: white;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footerLinks {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.footerLinks a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footerLinks a:hover {
+  color: #ff6b35;
+}
+
+@media (max-width: 900px) {
+  .pagosMain {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .pagosSidebar {
+    flex-direction: row;
+    gap: 16px;
+    margin-bottom: 1.5rem;
+  }
+
+  .pagosRow {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .pagosMain {
+    max-width: 98vw;
+    margin: 100px auto 0 auto;
+    padding: 1rem;
+  }
+
+  .walletsBox,
+  .saldoBox,
+  .networkBox,
+  .historialBox {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .saldoAmount {
+    font-size: 1.5rem;
+  }
+}
+
+/* Overlay para modales */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modales */
+.floatingModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+  padding: 2rem 2.5rem;
+  min-width: 320px;
+  max-width: 90vw;
+  z-index: 2100;
+  display: none;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: fadeInSlide 0.3s;
+}
+
+.floatingModal.active {
+  display: flex;
+}
+
+.floatingModal h3 {
+  color: #ff6b35;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.floatingModal label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: #333;
+  display: block;
+}
+
+.floatingModal input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  box-sizing: border-box;
+}
+
+.floatingModal input:focus {
+  outline: none;
+  border: 1.5px solid #ff6b35;
+}
+
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.modalBtn {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  font-size: 1rem;
+}
+
+.modalBtn:hover:not(:disabled) {
+  background: linear-gradient(45deg, #f7931e, #ff6b35);
+  transform: scale(1.05);
+}
+
+.modalBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.networkSelect {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  font-size: 1.08rem;
+  background: #f9f9f9;
+  color: #222;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  outline: none;
+  transition: border 0.2s;
+  margin-bottom: 0.8rem;
+  box-sizing: border-box;
+}
+
+.networkSelect:focus {
+  border: 1.5px solid #ff6b35;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+
+@media (max-width: 600px) {
+  .floatingModal {
+    padding: 1.2rem 1rem;
+    min-width: 90vw;
+  }
+}
+

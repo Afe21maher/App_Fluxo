@@ -1,0 +1,303 @@
+.evvmFisher {
+  background: white;
+  border-radius: 18px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  margin-top: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  color: #ff6b35;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.toggleBtn {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.7rem 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+}
+
+.toggleBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+}
+
+.toggleBtn.active {
+  background: linear-gradient(45deg, #4caf50, #45a049);
+}
+
+.fisherStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  border: 2px solid #2196f3;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: #1976d2;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0d47a1;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.fishingSpots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.spotCard {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.spotCard:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.spotCard.active {
+  border-color: #4caf50;
+  background: #f1f8f4;
+}
+
+.spotCard.selected {
+  border-color: #ff6b35;
+  background: #fff5f2;
+}
+
+.spotHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.spotName {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.spotStatus {
+  font-size: 1.2rem;
+}
+
+.spotDescription {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+.spotStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.spotStat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.spotStatLabel {
+  color: #888;
+}
+
+.spotStatValue {
+  color: #333;
+  font-weight: 500;
+}
+
+.transactionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transactionCard {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.2rem;
+  border: 2px solid #e0e0e0;
+  transition: all 0.2s;
+}
+
+.transactionCard:hover {
+  border-color: #ff6b35;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+}
+
+.transactionCard.executed {
+  background: #f1f8f4;
+  border-color: #4caf50;
+}
+
+.transactionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.transactionId {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.transactionStatus {
+  font-weight: 600;
+  color: #4caf50;
+}
+
+.transactionCard.executed .transactionStatus {
+  color: #4caf50;
+}
+
+.transactionDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.transactionDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.detailLabel {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.detailValue {
+  font-size: 0.95rem;
+  color: #333;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.executeBtn {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.executeBtn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.emptyState {
+  display: flex;
+  gap: 1rem;
+  padding: 2rem;
+  background: #f5f5f5;
+  border-radius: 12px;
+  border: 2px dashed #ddd;
+  align-items: center;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.emptyText {
+  flex: 1;
+}
+
+.emptyText strong {
+  display: block;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.emptyText p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .evvmFisher {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .fishingSpots {
+    grid-template-columns: 1fr;
+  }
+
+  .transactionDetails {
+    grid-template-columns: 1fr;
+  }
+}
+
