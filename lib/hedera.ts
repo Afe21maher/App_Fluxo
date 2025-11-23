@@ -44,17 +44,77 @@ export function getHederaProvider() {
 
 /**
  * Convierte un provider EIP-1193 (como Privy) a un signer de ethers
+ * Usa un enfoque que evita completamente ENS para redes que no lo soportan
  */
 export async function getSignerFromProvider(provider: any) {
-  // Configurar la red de Hedera para evitar que intente resolver ENS
-  const hederaNetwork = {
-    chainId: 296, // Hedera Testnet chain ID
-    name: 'hedera-testnet',
-    // No incluir ensAddress para deshabilitar ENS
+  // Primero intentar con BrowserProvider (método estándar)
+  try {
+    const hederaNetwork = {
+      chainId: 296,
+      name: 'hedera-testnet',
+    }
+    const ethersProvider = new ethers.BrowserProvider(provider, hederaNetwork)
+    return await ethersProvider.getSigner()
+  } catch (error: any) {
+    // Si el error es por ENS, usar un enfoque alternativo
+    if (error.message?.includes('ENS') || error.code === 'UNSUPPORTED_OPERATION' || error.message?.includes('does not support ENS')) {
+      console.warn('Error de ENS detectado, usando enfoque alternativo...', error.message)
+      
+      try {
+        // Obtener la dirección de la cuenta desde el provider
+        const accounts = await provider.request({ method: 'eth_accounts' })
+        if (!accounts || accounts.length === 0) {
+          throw new Error('No se encontraron cuentas en el provider')
+        }
+        const address = accounts[0]
+        
+        // Usar JsonRpcProvider directamente con el RPC de Hedera
+        // Esto evita completamente el problema de ENS
+        const rpcUrl = getHederaRPC()
+        const jsonRpcProvider = new ethers.JsonRpcProvider(rpcUrl)
+        
+        // Crear un signer usando JsonRpcSigner
+        // Este signer usará el provider EIP-1193 para firmar transacciones
+        const signer = new ethers.JsonRpcSigner(jsonRpcProvider, address)
+        
+        // Sobrescribir sendTransaction para usar el provider EIP-1193
+        const originalSendTransaction = signer.sendTransaction.bind(signer)
+        signer.sendTransaction = async function(tx: ethers.TransactionRequest): Promise<ethers.TransactionResponse> {
+          // Preparar la transacción
+          const txRequest = await this.populateTransaction(tx)
+          
+          // Enviar a través del provider EIP-1193
+          const txHash = await provider.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              from: address,
+              to: txRequest.to,
+              value: txRequest.value ? `0x${txRequest.value.toString(16)}` : undefined,
+              data: txRequest.data,
+              gas: txRequest.gasLimit ? `0x${txRequest.gasLimit.toString(16)}` : undefined,
+              gasPrice: txRequest.gasPrice ? `0x${txRequest.gasPrice.toString(16)}` : undefined,
+            }]
+          })
+          
+          // Obtener la transacción usando el JsonRpcProvider
+          const txResponse = await jsonRpcProvider.getTransaction(txHash)
+          if (!txResponse) {
+            throw new Error('No se pudo obtener la transacción después de enviarla')
+          }
+          
+          return txResponse
+        }
+        
+        return signer
+      } catch (altError: any) {
+        console.error('Error en enfoque alternativo:', altError)
+        throw new Error(`No se pudo obtener el signer. Error original: ${error.message}. Error alternativo: ${altError.message}`)
+      }
+    }
+    
+    // Si el error no es por ENS, relanzarlo
+    throw error
   }
-  
-  const ethersProvider = new ethers.BrowserProvider(provider, hederaNetwork)
-  return await ethersProvider.getSigner()
 }
 
 /**
