@@ -46,7 +46,14 @@ export function getHederaProvider() {
  * Convierte un provider EIP-1193 (como Privy) a un signer de ethers
  */
 export async function getSignerFromProvider(provider: any) {
-  const ethersProvider = new ethers.BrowserProvider(provider)
+  // Configurar la red de Hedera para evitar que intente resolver ENS
+  const hederaNetwork = {
+    chainId: 296, // Hedera Testnet chain ID
+    name: 'hedera-testnet',
+    // No incluir ensAddress para deshabilitar ENS
+  }
+  
+  const ethersProvider = new ethers.BrowserProvider(provider, hederaNetwork)
   return await ethersProvider.getSigner()
 }
 
