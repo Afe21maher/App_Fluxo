@@ -1,22 +1,21 @@
-# Privy Session Signer App
-
-Aplicación de demostración que implementa inicio de sesión con Privy y session signers para acciones delegadas.
+# Integraciones
+Acerca de Sistema de Pagos blockchain Offline utilizando Redes Mesh, implementado con EVVM, Hedera y Privy...
 
 ## Requisitos del Hackathon
 
-✅ **Construido usando Privy's APIs o SDK**
+**Construido usando Privy's APIs o SDK**
 - Usa `@privy-io/react-auth` para autenticación
 - Usa `useHeadlessDelegatedActions` hook para gestión de session signers y delegación de wallets
 
-✅ **Usa Privy para autenticación y gestión de wallets embebidos**
+ **Usa Privy para autenticación y gestión de wallets embebidos**
 - Configurado con `embeddedWallets` en el PrivyProvider
 - Soporta múltiples métodos de login (email, wallet, SMS)
 
-✅ **Genera y autoriza una clave de session signer de Privy**
+**Genera y autoriza una clave de session signer de Privy**
 - Implementado en `components/SessionSignerDemo.tsx`
 - Función `handleDelegateWallet` usa `delegateWallet` de `useHeadlessDelegatedActions` para crear y autorizar el session signer
 
-✅ **Demuestra al menos una acción delegada usando el session signer**
+**Demuestra al menos una acción delegada usando el session signer**
 - `handleDelegatedAction` muestra cómo ejecutar acciones sin re-aprobación
 - Preparación de transacciones usando el session signer
 
