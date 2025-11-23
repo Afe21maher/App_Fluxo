@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import FluxoLanding from '@/components/fluxo/FluxoLanding'
 
+// Hacer la página dinámica para evitar errores de prerender
+export const dynamic = 'force-dynamic'
+
 export default function FluxoPage() {
   const { ready, authenticated } = usePrivy()
   const router = useRouter()

@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react'
 import LoginButton from '@/components/LoginButton'
 import SessionSignerDemo from '@/components/SessionSignerDemo'
 
+// Hacer la página dinámica para evitar errores de prerender
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
   const { ready, authenticated, user } = usePrivy()
   const { wallets } = useWallets()
