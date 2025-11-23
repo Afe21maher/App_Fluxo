@@ -1,0 +1,23 @@
+# Archivos de Hardhat que no deben incluirse en el build
+hardhat.config.ts
+hardhat.config.js
+contracts/
+scripts/
+test/
+cache/
+artifacts/
+typechain-types/
+dist/
+src/
+
+# Archivos de desarrollo
+*.log
+error.log
+combined.log
+
+# Datos locales
+data/
+
+# Archivos de configuración de Hardhat
+Fluxo/
+
