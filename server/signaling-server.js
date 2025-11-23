@@ -12,7 +12,8 @@
 const WebSocket = require('ws');
 const http = require('http');
 
-const PORT = process.env.SIGNALING_PORT || 8081;
+// Railway usa PORT, pero también soportamos SIGNALING_PORT para desarrollo local
+const PORT = process.env.PORT || process.env.SIGNALING_PORT || 8081;
 
 // Crear servidor HTTP
 const server = http.createServer();
@@ -227,9 +228,14 @@ setInterval(() => {
 }, 60000); // Cada 60 segundos
 
 // Iniciar servidor
-server.listen(PORT, () => {
-  console.log(`✅ Servidor escuchando en ws://localhost:${PORT}`);
+// Railway requiere escuchar en 0.0.0.0 para aceptar conexiones externas
+const HOST = process.env.RAILWAY_ENVIRONMENT ? '0.0.0.0' : 'localhost';
+server.listen(PORT, HOST, () => {
+  console.log(`✅ Servidor escuchando en ws://${HOST}:${PORT}`);
   console.log(`📊 Peers conectados: ${peers.size}`);
+  if (process.env.RAILWAY_ENVIRONMENT) {
+    console.log(`🌐 Servidor desplegado en Railway`);
+  }
 });
 
 // Manejo de errores
