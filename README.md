@@ -1,186 +1,76 @@
-# Offline Mesh Payments
+# Privy Session Signer App
 
-Sistema de pagos blockchain offline utilizando redes mesh, implementado con EVVM, Hedera y Privy.
+Aplicación de demostración que implementa inicio de sesión con Privy y session signers para acciones delegadas.
 
-## Arquitectura
+## Requisitos del Hackathon
 
-```
-Red Mesh (libp2p + XMTP) → EVVM Fisher/Relayer → Sincronización (Hedera)
-```
+✅ **Construido usando Privy's APIs o SDK**
+- Usa `@privy-io/react-auth` para autenticación
+- Usa `useHeadlessDelegatedActions` hook para gestión de session signers y delegación de wallets
 
-### Flujo de una Transacción:
+✅ **Usa Privy para autenticación y gestión de wallets embebidos**
+- Configurado con `embeddedWallets` en el PrivyProvider
+- Soporta múltiples métodos de login (email, wallet, SMS)
 
-1. **Usuario crea pago offline** → Se firma localmente
-2. **Se guarda en storage offline** → Base de datos local (LevelDB)
-3. **EVVM Fisher captura** → Procesa en blockchain virtual (sin gas)
-4. **Se ejecuta en EVVM** → Transacción válida en red virtual
-5. **Se transmite por mesh** → Otros nodos cercanos la reciben
-6. **Cuando hay internet** → Se sincroniza con Hedera (rápido y barato)
+✅ **Genera y autoriza una clave de session signer de Privy**
+- Implementado en `components/SessionSignerDemo.tsx`
+- Función `handleDelegateWallet` usa `delegateWallet` de `useHeadlessDelegatedActions` para crear y autorizar el session signer
 
-## Instalación
-
-```bash
-# Instalar dependencias
-npm install
-
-# Compilar contratos
-npm run compile:contracts
-```
+✅ **Demuestra al menos una acción delegada usando el session signer**
+- `handleDelegatedAction` muestra cómo ejecutar acciones sin re-aprobación
+- Preparación de transacciones usando el session signer
 
 ## Configuración
 
-1. Copia `.env.example` a `.env`
-2. Configura las variables de entorno:
-
-```env
-# Hedera (obligatorio para sincronización)
-HEDERA_NETWORK=testnet
-HEDERA_ACCOUNT_ID=0.0.xxxxx
-HEDERA_PRIVATE_KEY=302e...
-
-# EVVM (obligatorio para fishing/relaying)
-SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
-SEPOLIA_PRIVATE_KEY=0x...
-
-# XMTP (obligatorio para comunicación)
-XMTP_PRIVATE_KEY=0x...
-XMTP_ENV=dev
-
-# Mesh Network (opcional)
-MESH_PORT=9000
-MESH_BOOTSTRAP_NODES=/ip4/127.0.0.1/tcp/9000/p2p/...
+1. Instala las dependencias:
+```bash
+npm install
 ```
 
-## Ejecución
+2. Configura tu App ID de Privy:
+   - Edita `.env.local` y reemplaza `your_privy_app_id_here` con tu App ID real de Privy
 
-### Desarrollo
+3. Ejecuta la aplicación en modo desarrollo:
 ```bash
 npm run dev
 ```
 
-### Producción
-```bash
-npm run build
-npm start
-```
+4. Abre [http://localhost:3000](http://localhost:3000) en tu navegador
 
-### Ejemplo de Uso
-```bash
-# Ver src/examples/usage.ts para ejemplos completos
-ts-node src/examples/usage.ts
-```
+## Características
+
+- **Inicio de Sesión**: Múltiples métodos (email, wallet, SMS)
+- **Wallets Embebidos**: Creación automática de wallets para usuarios sin wallet
+- **Session Signers**: Creación y autorización de session signers
+- **Acciones Delegadas**: Ejecución de acciones sin re-aprobación constante
+- **UI Moderna**: Interfaz limpia y responsive
 
 ## Estructura del Proyecto
 
 ```
-src/
-├── config/         # Configuración de la aplicación
-├── mesh/           # Red mesh (libp2p)
-│   └── meshNetwork.ts
-├── evvm/           # EVVM Fisher/Relayer
-│   └── fisher.ts
-├── hedera/         # Sincronización Hedera
-│   └── syncService.ts
-├── xmtp/           # Comunicación XMTP
-│   └── messaging.ts
-├── storage/        # Almacenamiento offline (LevelDB)
-│   └── offlineStorage.ts
-├── sync/           # Sistema de sincronización
-│   └── syncManager.ts
-├── services/       # Servicios principales
-│   └── paymentService.ts
-├── utils/          # Utilidades
-│   └── logger.ts
-├── types/          # TypeScript types
-│   └── index.ts
-├── examples/       # Ejemplos de uso
-│   └── usage.ts
-└── index.ts        # Punto de entrada
-
-contracts/
-└── OfflinePaymentSync.sol  # Contrato para Hedera
-
-scripts/
-└── deploy-hedera.ts        # Script de deployment
+privy/
+├── app/
+│   ├── layout.tsx          # Layout principal con PrivyProvider
+│   ├── page.tsx            # Página principal
+│   └── globals.css         # Estilos globales
+├── components/
+│   ├── LoginButton.tsx     # Botón de inicio de sesión
+│   └── SessionSignerDemo.tsx # Demo de session signers
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-## Funcionalidades Principales
+## Uso
 
-### 1. Red Mesh (libp2p)
-- Comunicación P2P entre dispositivos cercanos
-- Transmisión de transacciones sin internet
-- Descubrimiento automático de peers
+1. Inicia sesión usando cualquier método disponible
+2. Una vez autenticado, verás la información de tu usuario y wallets
+3. Haz clic en "Crear Session Signer" para generar y autorizar un session signer
+4. Usa "Ejecutar Acción Delegada" para demostrar acciones sin re-aprobación
 
-### 2. EVVM Fisher/Relayer
-- Captura transacciones offline
-- Ejecuta en blockchain virtual (sin gas)
-- Usa fishing spots para comunicación
-- Valida firmas EIP-191
+## Notas
 
-### 3. Sincronización Hedera
-- Sincroniza transacciones cuando hay internet
-- Alta velocidad (10k+ TPS)
-- Bajas tarifas
-- Soporte para tokens y HBAR
-
-### 4. XMTP Messaging
-- Comunicación descentralizada
-- Envío de solicitudes de pago
-- Notificaciones de transacciones
-
-### 5. Almacenamiento Offline
-- Base de datos local (LevelDB)
-- Persistencia de transacciones
-- Índices para búsqueda rápida
-
-## API Principal
-
-```typescript
-// Crear pago offline
-const tx = await paymentService.createOfflinePayment(
-  "0x...",      // Dirección destino
-  "1000000",    // Cantidad
-  undefined     // Token address (undefined = HBAR)
-);
-
-// Crear solicitud de pago
-const request = await paymentService.createPaymentRequest(
-  "0x...",
-  "500000",
-  undefined,
-  "Payment for services"
-);
-
-// Obtener transacciones pendientes
-const txs = await paymentService.getTransactions();
-
-// Obtener transacción específica
-const tx = await paymentService.getTransaction(txId);
-```
-
-## Deployment
-
-### Deployar Contrato en Hedera
-
-```bash
-# Configurar .env con credenciales de Hedera
-npm run deploy:hedera
-```
-
-##  Testing
-
-```bash
-npm test
-```
-
-## Recursos
-
-- [EVVM Documentation](https://evvm.info)
-- [Hedera Documentation](https://docs.hedera.com)
-- [XMTP Documentation](https://docs.xmtp.org)
-- [libp2p Documentation](https://docs.libp2p.io)
-
-##  Licencia
-
-MIT
+- Asegúrate de tener tu App ID de Privy configurado en `.env.local`
+- El session signer permite ejecutar acciones en nombre del usuario sin requerir aprobación constante
+- Esto es ideal para aplicaciones que requieren alta velocidad y continuidad (pagos rápidos, trading, etc.)
 

@@ -328,8 +328,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="Landing.html#inicio">Inicio</a></li>
                 <li><a href="Pagos.html">Pagos</a></li>
-                <li><a href="#">Perfil</a></li>
-                <li><a href="#">Salir</a></li>
+                <li><a href="#" onclick="event.preventDefault(); window.FluxoAPI.logout(); window.location.href='Landing.html';">Salir</a></li>
                 <a href="Landing.html" class="nav-cta">Comienza Aquí</a>
             </ul>
             <button class="menu-toggle" id="menuToggle">☰</button>
@@ -349,56 +348,36 @@
                 <div class="pagos-row">
                     <div class="wallets-box">
                         <div class="wallets-title">Wallets</div>
-                        <div class="wallet-list">
+                        <div class="wallet-list" id="wallet-list">
                             <div class="wallet-item">
-                                <div class="wallet-icon">🦊</div>
-                                <div class="wallet-name">MetaMask</div>
-                                <div class="wallet-address" style="font-size:0.9rem;color:#888;">0xA1...B2C3</div>
+                                <div class="wallet-icon">🔐</div>
+                                <div>
+                                    <div class="wallet-name" id="wallet-name">Privy Wallet</div>
+                                    <div class="wallet-address" id="wallet-address" style="font-size:0.9rem;color:#888;">Conectando...</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="saldo-box">
                         <div class="saldo-title">Saldo de la cuenta</div>
-                        <div class="saldo-amount">$1,250.00</div>
-                        <div class="saldo-currency">MXN</div>
+                        <div class="saldo-amount" id="saldo-amount">$0.00</div>
+                        <div class="saldo-currency">HBAR (Hedera)</div>
                         <div class="saldo-actions">
+                            <button class="saldo-action-btn" onclick="syncHedera()">Sincronizar</button>
                         </div>
                     </div>
                 </div>
                 <div class="network-box">
                     <div class="network-title">Red utilizada</div>
                     <div class="network-status">
-                        <span class="network-dot"></span>
-                        <span>Ethereum Mainnet</span>
+                        <span class="network-dot" id="network-dot"></span>
+                        <span id="network-status">Mesh Network</span>
                     </div>
                 </div>
                 <div class="historial-box">
                     <div class="historial-title">Historial de transacciones</div>
-                    <div class="historial-list">
-                        <div class="historial-item">
-                            <div class="historial-icon">📤</div>
-                            <div class="historial-details">
-                                Envío a 0xB4...D5E6
-                                <div style="font-size:0.85rem;color:#888;">Hace 2 horas</div>
-                            </div>
-                            <div class="historial-amount">-$250.00</div>
-                        </div>
-                        <div class="historial-item">
-                            <div class="historial-icon">📥</div>
-                            <div class="historial-details">
-                                Depósito de 0xC7...F8G9
-                                <div style="font-size:0.85rem;color:#888;">Ayer</div>
-                            </div>
-                            <div class="historial-amount">+$500.00</div>
-                        </div>
-                        <div class="historial-item">
-                            <div class="historial-icon">🛒</div>
-                            <div class="historial-details">
-                                Compra en Amazon
-                                <div style="font-size:0.85rem;color:#888;">Hace 3 días</div>
-                            </div>
-                            <div class="historial-amount">-$120.00</div>
-                        </div>
+                    <div class="historial-list" id="historial-list">
+                        <div style="color:#888;padding:1rem;text-align:center;">Cargando transacciones...</div>
                     </div>
                 </div>
             </div>
@@ -417,5 +396,121 @@
             <p>&copy; 2023 Fluxo. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <!-- Cargar Ethers.js -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <!-- Cargar Fluxo API -->
+    <script src="fluxo-api.js"></script>
+    
+    <script>
+        // Modal para crear pago
+        function showPaymentModal() {
+            const to = prompt('Dirección del destinatario:');
+            if (!to) return;
+            
+            const amount = prompt('Cantidad:');
+            if (!amount || isNaN(amount)) {
+                alert('Cantidad inválida');
+                return;
+            }
+            
+            const message = prompt('Mensaje (opcional):') || '';
+            
+            createPayment(to, amount, message);
+        }
+
+        // Crear pago
+        async function createPayment(to, amount, message) {
+            try {
+                if (!window.FluxoApp.wallet) {
+                    alert('Por favor, inicia sesión primero');
+                    window.location.href = 'Landing.html';
+                    return;
+                }
+
+                const result = await window.FluxoAPI.createPayment(to, amount, message);
+                alert('✅ Pago creado exitosamente!');
+                
+                // Actualizar transacciones
+                await window.FluxoAPI.getTransactions();
+                window.FluxoAPI.updateTransactionsUI(window.FluxoApp.transactions);
+            } catch (error) {
+                console.error('Error creando pago:', error);
+                alert('Error al crear pago: ' + error.message);
+            }
+        }
+
+        // Sincronizar con Hedera
+        async function syncHedera() {
+            try {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Sincronizando...';
+                button.disabled = true;
+
+                await window.FluxoAPI.syncHedera();
+                await window.FluxoAPI.getStatus();
+                window.FluxoAPI.updateBalanceUI();
+                
+                alert('✅ Sincronización completada!');
+                button.textContent = originalText;
+                button.disabled = false;
+            } catch (error) {
+                console.error('Error sincronizando:', error);
+                alert('Error al sincronizar: ' + error.message);
+                button.textContent = 'Sincronizar';
+                button.disabled = false;
+            }
+        }
+
+        // Botones de acción
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.pagos-btn');
+            buttons[0].addEventListener('click', () => showPaymentModal()); // Comprar
+            buttons[1].addEventListener('click', () => showPaymentModal()); // Enviar
+            buttons[2].addEventListener('click', () => {
+                // Recibir - mostrar dirección
+                if (window.FluxoApp.wallet) {
+                    alert('Tu dirección: ' + window.FluxoApp.wallet.address);
+                } else {
+                    alert('Por favor, inicia sesión primero');
+                }
+            });
+        });
+
+        // Inicializar aplicación
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Verificar si hay usuario logueado
+                await window.FluxoAPI.init();
+                
+                if (!window.FluxoApp.wallet) {
+                    // Si no hay wallet, redirigir a login
+                    alert('Por favor, inicia sesión primero');
+                    window.location.href = 'Landing.html';
+                    return;
+                }
+
+                // Actualizar UI
+                window.FluxoAPI.updateUserUI();
+                await window.FluxoAPI.getTransactions();
+                window.FluxoAPI.updateTransactionsUI(window.FluxoApp.transactions);
+                window.FluxoAPI.updateBalanceUI();
+                window.FluxoAPI.updateNetworkUI();
+
+                // Actualizar cada 30 segundos
+                setInterval(async () => {
+                    await window.FluxoAPI.getStatus();
+                    await window.FluxoAPI.getTransactions();
+                    window.FluxoAPI.updateTransactionsUI(window.FluxoApp.transactions);
+                    window.FluxoAPI.updateBalanceUI();
+                    window.FluxoAPI.updateNetworkUI();
+                }, 30000);
+            } catch (error) {
+                console.error('Error inicializando:', error);
+            }
+        });
+    </script>
 </body>
 </html>

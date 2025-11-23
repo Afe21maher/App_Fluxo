@@ -625,6 +625,14 @@
             margin-bottom: 1rem;
         }
 
+        .feature-card-icon img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
         .feature-card h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
@@ -874,7 +882,6 @@
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#caracteristicas">Características</a></li>
                 <li><a href="#como-funciona">Cómo Funciona</a></li>
-                <li><a href="#contacto">Contacto</a></li>
                 <a href="#" class="nav-cta">Comienza Aquí</a>
             </ul>
             <button class="menu-toggle" id="menuToggle">☰</button>
@@ -1015,17 +1022,17 @@
             <p class="section-subtitle">Fluxo rompe las limitantes de conexión!</p>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-card-icon">📶</div>
+                    <div class="feature-card-icon"><img src="imagenes/no-wifi.png" alt="Pagos Offline"></div>
                     <h3>Pagos Offline</h3>
                     <p>Procesa pagos sin necesidad de conexión a internet. Ideal para zonas con poca disponibilidad de red o eventos masivos.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-card-icon">🔒</div>
+                    <div class="feature-card-icon"><img src="imagenes/secure-shield.png" alt="Seguridad y confianza"></div>
                     <h3>Seguridad y confianza</h3>
                     <p>Todas las transacciones están encriptadas.</p>
                 </div> 
                 <div class="feature-card">
-                    <div class="feature-card-icon">⚡</div>
+                    <div class="feature-card-icon"><img src="imagenes/money.png" alt="Transacciones rápidas"></div>
                     <h3>Transacciones rápidas</h3>
                     <p>Transacciones lanzadas por medio de dispositivos compatibles.</p>
                 </div>
@@ -1070,6 +1077,11 @@
     </footer>
 
     <!-- Scripts -->
+    <!-- Cargar Ethers.js -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <!-- Cargar Fluxo API -->
+    <script src="fluxo-api.js"></script>
+    
     <script>
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
@@ -1120,19 +1132,73 @@
             input.setAttribute('type', type);
         }
 
-        // Handle login form submission
-        function handleLogin(event) {
+        // Handle login form submission con Privy
+        async function handleLogin(event) {
             event.preventDefault();
-            // Aquí iría la lógica para manejar el inicio de sesión
-            alert('Iniciar sesión con: ' + new FormData(event.target).get('email'));
+            const submitButton = event.target.querySelector('.submit-button');
+            const originalText = submitButton.textContent;
+            
+            try {
+                submitButton.textContent = 'Conectando...';
+                submitButton.disabled = true;
+
+                // Login con Privy (email)
+                const user = await window.FluxoAPI.login('email');
+                
+                if (user && user.wallet) {
+                    // Redirigir a página de pagos
+                    window.location.href = 'Pagos.html';
+                } else {
+                    alert('Error: No se pudo crear la wallet');
+                }
+            } catch (error) {
+                console.error('Error en login:', error);
+                alert('Error al iniciar sesión: ' + error.message);
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
         }
 
-        // Handle register form submission
-        function handleRegister(event) {
+        // Handle register form submission con Privy
+        async function handleRegister(event) {
             event.preventDefault();
-            // Aquí iría la lógica para manejar el registro
-            alert('Registrar con: ' + new FormData(event.target).get('email'));
+            const submitButton = event.target.querySelector('.submit-button');
+            const originalText = submitButton.textContent;
+            
+            try {
+                submitButton.textContent = 'Creando cuenta...';
+                submitButton.disabled = true;
+
+                // Registro con Privy (email)
+                const user = await window.FluxoAPI.login('email');
+                
+                if (user && user.wallet) {
+                    // Redirigir a página de pagos
+                    window.location.href = 'Pagos.html';
+                } else {
+                    alert('Error: No se pudo crear la wallet');
+                }
+            } catch (error) {
+                console.error('Error en registro:', error);
+                alert('Error al crear cuenta: ' + error.message);
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
         }
+
+        // Inicializar cuando la página carga
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Verificar si ya hay usuario logueado
+            try {
+                await window.FluxoAPI.init();
+                if (window.FluxoApp.wallet) {
+                    // Si ya está logueado, redirigir a pagos
+                    // window.location.href = 'Pagos.html';
+                }
+            } catch (error) {
+                console.error('Error inicializando:', error);
+            }
+        });
     </script>
 </body>
 </html>
