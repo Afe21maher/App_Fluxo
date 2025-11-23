@@ -315,162 +315,6 @@
                 font-size: 1.5rem;
             }
         }
-        .floating-action {
-            position: fixed;
-            bottom: 32px;
-            right: 32px;
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .fab-btn {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff6b35 60%, #f7931e 100%);
-            box-shadow: 0 6px 24px rgba(255,107,53,0.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 2.2rem;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-            position: relative;
-        }
-
-        .fab-btn:hover {
-            background: linear-gradient(135deg, #f7931e 60%, #ff6b35 100%);
-            transform: scale(1.08);
-        }
-
-        .fab-btn img {
-            width: 36px;
-            height: 36px;
-            object-fit: contain;
-        }
-
-        .fab-label {
-            position: absolute;
-            right: 80px;
-            background: #fff;
-            color: #ff6b35;
-            padding: 0.5rem 1rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(255,107,53,0.10);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            white-space: nowrap;
-        }
-
-        .fab-btn:hover .fab-label {
-            opacity: 1;
-        }
-
-        .floating-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.18);
-            padding: 2rem 2.5rem;
-            min-width: 320px;
-            max-width: 90vw;
-            z-index: 2100;
-            display: none;
-            flex-direction: column;
-            gap: 1.2rem;
-            animation: fadeInSlide 0.3s;
-        }
-
-        .floating-modal.active {
-            display: flex;
-        }
-
-        .floating-modal h3 {
-            color: #ff6b35;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .floating-modal label {
-            font-weight: 500;
-            margin-bottom: 0.3rem;
-            color: #333;
-        }
-
-        .floating-modal input {
-            width: 100%;
-            padding: 0.7rem 1rem;
-            border-radius: 10px;
-            border: 1px solid #eee;
-            font-size: 1rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .floating-modal .modal-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-
-        .floating-modal .modal-btn {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 0.7rem 1.3rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        .floating-modal .modal-btn:hover {
-            background: linear-gradient(45deg, #f7931e, #ff6b35);
-            transform: scale(1.05);
-        }
-
-        .network-select-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .network-select {
-            width: 100%;
-            padding: 0.9rem 1.2rem;
-            border-radius: 12px;
-            border: 1px solid #eee;
-            font-size: 1.08rem;
-            background: #f9f9f9;
-            color: #222;
-            font-weight: 500;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            outline: none;
-            transition: border 0.2s;
-        }
-        .network-select:focus {
-            border: 1.5px solid #ff6b35;
-        }
-
-        @media (max-width: 600px) {
-            .floating-modal {
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                padding: 1.2rem 1rem;
-                min-width: 90vw;
-            }
-        }
     </style>
 </head>
 <body>
@@ -484,8 +328,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="Landing.html#inicio">Inicio</a></li>
                 <li><a href="Pagos.html">Pagos</a></li>
-                <li><a href="#">Perfil</a></li>
-                <li><a href="#">Salir</a></li>
+                <li><a href="#" onclick="event.preventDefault(); window.FluxoAPI.logout(); window.location.href='Landing.html';">Salir</a></li>
                 <a href="Landing.html" class="nav-cta">Comienza Aquí</a>
             </ul>
             <button class="menu-toggle" id="menuToggle">☰</button>
@@ -505,115 +348,41 @@
                 <div class="pagos-row">
                     <div class="wallets-box">
                         <div class="wallets-title">Wallets</div>
-                        <div class="wallet-list">
+                        <div class="wallet-list" id="wallet-list">
                             <div class="wallet-item">
-                                <div class="wallet-icon">🦊</div>
-                                <div class="wallet-name">MetaMask</div>
-                                <div class="wallet-address" style="font-size:0.9rem;color:#888;">0xA1...B2C3</div>
-                            </div>  
+                                <div class="wallet-icon">🔐</div>
+                                <div>
+                                    <div class="wallet-name" id="wallet-name">Privy Wallet</div>
+                                    <div class="wallet-address" id="wallet-address" style="font-size:0.9rem;color:#888;">Conectando...</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="saldo-box">
                         <div class="saldo-title">Saldo de la cuenta</div>
-                        <div class="saldo-amount">$1,250.00</div>
-                        <div class="saldo-currency">MXN</div>
+                        <div class="saldo-amount" id="saldo-amount">$0.00</div>
+                        <div class="saldo-currency">HBAR (Hedera)</div>
                         <div class="saldo-actions">
+                            <button class="saldo-action-btn" onclick="syncHedera()">Sincronizar</button>
                         </div>
                     </div>
                 </div>
                 <div class="network-box">
                     <div class="network-title">Red utilizada</div>
                     <div class="network-status">
-                        <span class="network-dot"></span>
-                        <span id="networkLabel">Ethereum Mainnet</span>
+                        <span class="network-dot" id="network-dot"></span>
+                        <span id="network-status">Mesh Network</span>
                     </div>
                 </div>
                 <div class="historial-box">
                     <div class="historial-title">Historial de transacciones</div>
-                    <div class="historial-list">
-                        <div class="historial-item">
-                            <div class="historial-icon">📤</div>
-                            <div class="historial-details">
-                                Envío a 0xB4...D5E6
-                                <div style="font-size:0.85rem;color:#888;">Hace 2 horas</div>
-                            </div>
-                            <div class="historial-amount">-$250.00</div>
-                        </div>
-                        <div class="historial-item">
-                            <div class="historial-icon">📥</div>
-                            <div class="historial-details">
-                                Depósito de 0xC7...F8G9
-                                <div style="font-size:0.85rem;color:#888;">Ayer</div>
-                            </div>
-                            <div class="historial-amount">+$500.00</div>
-                        </div>
-                        <div class="historial-item">
-                            <div class="historial-icon">🛒</div>
-                            <div class="historial-details">
-                                Compra en Amazon
-                                <div style="font-size:0.85rem;color:#888;">Hace 3 días</div>
-                            </div>
-                            <div class="historial-amount">-$120.00</div>
-                        </div>
+                    <div class="historial-list" id="historial-list">
+                        <div style="color:#888;padding:1rem;text-align:center;">Cargando transacciones...</div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-    <!-- Modal para Pago -->
-    <div class="floating-modal" id="modalPay">
-        <h3>Realizar pago</h3>
-        <label for="payTo">Enviar a (Wallet o usuario):</label>
-        <input type="text" id="payTo" placeholder="Ej: 0xA1...B2C3">
-        <label for="payAmount">Monto:</label>
-        <input type="number" id="payAmount" placeholder="$0.00">
-        <label for="payNetwork">Red:</label>
-        <select id="payNetwork" class="network-select" style="margin-bottom:0.8rem;">
-            <option value="ethereum">Ethereum Mainnet</option>
-            <option value="polygon">Polygon</option>
-            <option value="binance">Binance Smart Chain</option>
-            <option value="optimism">Optimism</option>
-            <option value="arbitrum">Arbitrum</option>
-        </select>
-        <div class="modal-actions">
-            <button class="modal-btn" onclick="closeModal('modalPay')">Cancelar</button>
-            <button class="modal-btn" onclick="sendPayment()">Enviar</button>
-        </div>
-    </div>
-
-    <!-- Modal para Recibir -->
-    <div class="floating-modal" id="modalReceive">
-        <h3>Recibir dinero</h3>
-        <label for="receiveFrom">De (Wallet o usuario):</label>
-        <input type="text" id="receiveFrom" placeholder="Ej: 0xB4...D5E6">
-        <label for="receiveAmount">Monto:</label>
-        <input type="number" id="receiveAmount" placeholder="$0.00">
-        <label for="receiveNetwork">Red:</label>
-        <select id="receiveNetwork" class="network-select" style="margin-bottom:0.8rem;">
-            <option value="ethereum">Ethereum Mainnet</option>
-            <option value="polygon">Polygon</option>
-            <option value="binance">Binance Smart Chain</option>
-            <option value="optimism">Optimism</option>
-            <option value="arbitrum">Arbitrum</option>
-        </select>
-        <div class="modal-actions">
-            <button class="modal-btn" onclick="closeModal('modalReceive')">Cancelar</button>
-            <button class="modal-btn" onclick="receivePayment()">Recibir</button>
-        </div>
-    </div>
-
-    <!-- Modal para Comprar -->
-    <div class="floating-modal" id="modalBuy">
-        <h3>Comprar</h3>
-        <div style="text-align:center; padding:2rem 0;">
-            <img src="imagenes/cart.png" alt="Comprar" style="width:64px; height:64px; margin-bottom:1rem;">
-            <p style="font-size:1.2rem; color:#888;">Coming soon...</p>
-        </div>
-        <div class="modal-actions">
-            <button class="modal-btn" onclick="closeModal('modalBuy')">Cerrar</button>
-        </div>
-    </div>
 
     <!-- Footer igual que Landing -->
     <footer>
@@ -628,54 +397,120 @@
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <!-- Cargar Ethers.js -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <!-- Cargar Fluxo API -->
+    <script src="fluxo-api.js"></script>
+    
     <script>
-    // Floating modal logic para los botones existentes
-    const btnEnviar = document.querySelector('.pagos-btn[title="Enviar"]');
-    const btnRecibir = document.querySelector('.pagos-btn[title="Recibir"]');
-    const modalPay = document.getElementById('modalPay');
-    const modalReceive = document.getElementById('modalReceive');
-    const btnComprar = document.querySelector('.pagos-btn[title="Comprar"]');
-    const modalBuy = document.getElementById('modalBuy');
+        // Modal para crear pago
+        function showPaymentModal() {
+            const to = prompt('Dirección del destinatario:');
+            if (!to) return;
+            
+            const amount = prompt('Cantidad:');
+            if (!amount || isNaN(amount)) {
+                alert('Cantidad inválida');
+                return;
+            }
+            
+            const message = prompt('Mensaje (opcional):') || '';
+            
+            createPayment(to, amount, message);
+        }
 
-    btnEnviar.addEventListener('click', () => {
-        modalPay.classList.add('active');
-        modalReceive.classList.remove('active');
-    });
+        // Crear pago
+        async function createPayment(to, amount, message) {
+            try {
+                if (!window.FluxoApp.wallet) {
+                    alert('Por favor, inicia sesión primero');
+                    window.location.href = 'Landing.html';
+                    return;
+                }
 
-    btnRecibir.addEventListener('click', () => {
-        modalReceive.classList.add('active');
-        modalPay.classList.remove('active');
-    });
+                const result = await window.FluxoAPI.createPayment(to, amount, message);
+                alert('✅ Pago creado exitosamente!');
+                
+                // Actualizar transacciones
+                await window.FluxoAPI.getTransactions();
+                window.FluxoAPI.updateTransactionsUI(window.FluxoApp.transactions);
+            } catch (error) {
+                console.error('Error creando pago:', error);
+                alert('Error al crear pago: ' + error.message);
+            }
+        }
 
-    btnComprar.addEventListener('click', () => {
-        modalBuy.classList.add('active');
-    });
+        // Sincronizar con Hedera
+        async function syncHedera() {
+            try {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Sincronizando...';
+                button.disabled = true;
 
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.remove('active');
-    }
+                await window.FluxoAPI.syncHedera();
+                await window.FluxoAPI.getStatus();
+                window.FluxoAPI.updateBalanceUI();
+                
+                alert('✅ Sincronización completada!');
+                button.textContent = originalText;
+                button.disabled = false;
+            } catch (error) {
+                console.error('Error sincronizando:', error);
+                alert('Error al sincronizar: ' + error.message);
+                button.textContent = 'Sincronizar';
+                button.disabled = false;
+            }
+        }
 
-    function sendPayment() {
-        // Aquí va la lógica para enviar el pago
-        closeModal('modalPay');
-        alert('Pago enviado');
-    }
+        // Botones de acción
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.pagos-btn');
+            buttons[0].addEventListener('click', () => showPaymentModal()); // Comprar
+            buttons[1].addEventListener('click', () => showPaymentModal()); // Enviar
+            buttons[2].addEventListener('click', () => {
+                // Recibir - mostrar dirección
+                if (window.FluxoApp.wallet) {
+                    alert('Tu dirección: ' + window.FluxoApp.wallet.address);
+                } else {
+                    alert('Por favor, inicia sesión primero');
+                }
+            });
+        });
 
-    function receivePayment() {
-        // Aquí va la lógica para recibir el pago
-        closeModal('modalReceive');
-        alert('Dinero recibido');
-    }
+        // Inicializar aplicación
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Verificar si hay usuario logueado
+                await window.FluxoAPI.init();
+                
+                if (!window.FluxoApp.wallet) {
+                    // Si no hay wallet, redirigir a login
+                    alert('Por favor, inicia sesión primero');
+                    window.location.href = 'Landing.html';
+                    return;
+                }
 
-    // Actualiza el nombre de la red al seleccionar
-    // (Solo para mostrar la red seleccionada en el cuadro principal, si lo deseas)
-    // Puedes eliminar este script si ya no lo necesitas.
-    const networkSelect = document.getElementById('networkSelect');
-    const networkLabel = document.getElementById('networkLabel');
+                // Actualizar UI
+                window.FluxoAPI.updateUserUI();
+                await window.FluxoAPI.getTransactions();
+                window.FluxoAPI.updateTransactionsUI(window.FluxoApp.transactions);
+                window.FluxoAPI.updateBalanceUI();
+                window.FluxoAPI.updateNetworkUI();
 
-    networkSelect.addEventListener('change', function() {
-        networkLabel.textContent = networkSelect.options[networkSelect.selectedIndex].text;
-    });
+                // Actualizar cada 30 segundos
+                setInterval(async () => {
+                    await window.FluxoAPI.getStatus();
+                    await window.FluxoAPI.getTransactions();
+                    window.FluxoAPI.updateTransactionsUI(window.FluxoApp.transactions);
+                    window.FluxoAPI.updateBalanceUI();
+                    window.FluxoAPI.updateNetworkUI();
+                }, 30000);
+            } catch (error) {
+                console.error('Error inicializando:', error);
+            }
+        });
     </script>
 </body>
 </html>

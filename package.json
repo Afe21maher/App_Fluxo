@@ -6,36 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "compile": "hardhat compile",
-    "check-config": "node scripts/check-config.js",
-    "deploy:testnet": "hardhat run scripts/deploy.js --network hederaTestnet",
-    "deploy:previewnet": "hardhat run scripts/deploy.js --network hederaPreviewnet",
-    "verify": "hardhat verify --network hederaTestnet",
-    "signaling": "node server/signaling-server.js",
-    "signaling:dev": "nodemon server/signaling-server.js"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@privy-io/react-auth": "^2.0.0",
-    "next": "^14.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "next": "^14.2.0",
+    "@privy-io/react-auth": "^2.0.0",
     "viem": "^2.0.0"
   },
   "devDependencies": {
-    "@hashgraph/sdk": "^2.77.0",
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "@types/minimatch": "^6.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "dotenv": "^16.6.1",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "^14.0.0",
-    "ethers": "^6.15.0",
-    "hardhat": "^2.27.0",
-    "nodemon": "^3.1.11",
     "typescript": "^5.0.0",
-    "ws": "^8.18.3"
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0"
   }
 }
+

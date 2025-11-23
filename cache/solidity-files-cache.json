@@ -1,0 +1,113 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/home/gael-gonzalez/Documentos/privy/contracts/FluxoPayment.sol": {
+      "lastModificationDate": 1763850023801,
+      "contentHash": "ad8053e5d35635efdeea3e3bf68ba25e",
+      "sourceName": "contracts/FluxoPayment.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "FluxoPayment"
+      ]
+    },
+    "/home/gael-gonzalez/Documentos/privy/contracts/OracleMock.sol": {
+      "lastModificationDate": 1763849933671,
+      "contentHash": "a7d829a77865d3648d00047f25c9da65",
+      "sourceName": "contracts/OracleMock.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "OracleMock"
+      ]
+    },
+    "/home/gael-gonzalez/Documentos/privy/contracts/FisherRewards.sol": {
+      "lastModificationDate": 1763859838053,
+      "contentHash": "0c1ddb8d6b98b89f3ce6b1a6baece131",
+      "sourceName": "contracts/FisherRewards.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "FisherRewards"
+      ]
+    }
+  }
+}
